@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MarvelAPIApp</string>
+    <string name="marvel_public_key">f3591dfde9b9d7c6fcd4b93b9e7f0444481479ce</string>
 </resources>
