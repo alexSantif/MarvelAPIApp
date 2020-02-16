@@ -27,22 +27,18 @@ data class ComicResults(
     val ean: String,
     @SerializedName("issn")
     val issn: String,
-    @SerializedName("format") val
-    format: String,
-    @SerializedName("pageCount") val
-    pageCount: Int,
-    @SerializedName("textObjects") val
-    textObjects: List<String>,
-    @SerializedName("resourceURI") val
-    resourceURI: String,
+    @SerializedName("format")
+    val format: String,
+    @SerializedName("pageCount")
+    val pageCount: Int,
+    @SerializedName("resourceURI")
+    val resourceURI: String,
     @SerializedName("urls")
     val urls: List<ComicUrls>,
     @SerializedName("series")
     val series: ComicSeries,
     @SerializedName("collections")
     val collections: List<String>,
-    @SerializedName("collectedIssues")
-    val collectedIssues: List<String>,
     @SerializedName("dates")
     val dates: List<ComicDates>,
     @SerializedName("prices")

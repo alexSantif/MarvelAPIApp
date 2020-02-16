@@ -5,38 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alex.marvelapiapp.R
 import br.com.alex.marvelapiapp.data.datasource.remote.response.comics.ComicResults
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.comics_list_row.view.*
+import kotlinx.android.synthetic.main.character_comics_list_row.view.*
 
-class MainAdapter(
-    private val comics: List<ComicResults>,
+class CharacterComicsAdapter(
+    private val characterComics: List<ComicResults>,
     private val activity: Activity
-) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+) :
+    RecyclerView.Adapter<CharacterComicsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            LayoutInflater.from(activity).inflate(R.layout.comics_list_row, parent, false)
+            LayoutInflater.from(activity).inflate(R.layout.character_comics_list_row, parent, false)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return comics.size
+        return characterComics.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val comic = comics[position]
-        holder.tvComicTitle.text = comic.title
+        val characterComic = characterComics[position]
         Glide.with(activity)
-            .load("${comic.thumbnail.path}/portrait_xlarge.${comic.thumbnail.extension}")
+            .load("${characterComic.thumbnail.path}/portrait_xlarge.${characterComic.thumbnail.extension}")
+            .placeholder(ContextCompat.getDrawable(activity, R.drawable.ic_launcher_background))
             .into(holder.ivComicImage)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvComicTitle: TextView = itemView.tv_comic_title
         val ivComicImage: ImageView = itemView.iv_comic_image
     }
 }

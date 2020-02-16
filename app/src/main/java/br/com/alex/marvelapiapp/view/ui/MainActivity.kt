@@ -1,18 +1,10 @@
 package br.com.alex.marvelapiapp.view.ui
 
-import android.app.Activity
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
-import android.widget.TextView.OnEditorActionListener
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,15 +14,12 @@ import br.com.alex.marvelapiapp.utils.hideSoftKeyboard
 import br.com.alex.marvelapiapp.utils.isNetworkAvailable
 import br.com.alex.marvelapiapp.utils.showSnackBar
 import br.com.alex.marvelapiapp.utils.showToast
+import br.com.alex.marvelapiapp.view.ui.adapter.CharacterComicsAdapter
 import br.com.alex.marvelapiapp.view.ui.adapter.MainAdapter
 import br.com.alex.marvelapiapp.viewmodel.MainViewModel
 import br.com.alex.marvelapiapp.viewmodel.ViewModelFactory
-import com.google.android.material.snackbar.Snackbar
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -66,8 +55,50 @@ class MainActivity : AppCompatActivity() {
         et_search_view.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 hideSoftKeyboard(this@MainActivity)
+                getCharacter()
                 true
             } else false
+        }
+    }
+
+    private fun getCharacter() {
+        if (isNetworkAvailable(this)) {
+            pb_loading_data.visibility = VISIBLE
+            rv_comics_list.visibility = GONE
+            viewModel.getCharacterByName(et_search_view.text.toString())
+            viewModel.characterLiveData.observe(this, Observer {
+                iv_hero_image.visibility = VISIBLE
+                pb_loading_data.visibility = GONE
+                tv_hero_title.visibility = VISIBLE
+                tv_hero_description.visibility = VISIBLE
+                tv_hero_comics.visibility = VISIBLE
+                rv_hero_comics.visibility = VISIBLE
+
+                if (it == null) {
+                    showToast(this, "Erro ao buscar a personagem")
+                } else {
+                    tv_hero_title.text = it[0].name
+                    tv_hero_description.text = it[0].description
+                    tv_hero_comics.text = "Veja as HQs de ${et_search_view.text}"
+                    Glide.with(this)
+                        .load("${it[0].characterThumbnail?.path}/portrait_xlarge.${it[0].characterThumbnail?.extension}")
+                        .into(iv_hero_image)
+
+                    viewModel.getCharacterComics(it[0].id)
+                    viewModel.characterComicsLiveData.observe(this, Observer { characterComics ->
+                        if (characterComics == null) {
+                            showToast(this, "Erro ao buscar as HQs da personagem")
+                        } else {
+                            rv_hero_comics.adapter = CharacterComicsAdapter(characterComics, this)
+                            val layoutManager =
+                                LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+                            rv_hero_comics.layoutManager = layoutManager
+                        }
+                    })
+                }
+            })
+        } else {
+            showToast(this, "Sem conexão com a Internet")
         }
     }
 }
