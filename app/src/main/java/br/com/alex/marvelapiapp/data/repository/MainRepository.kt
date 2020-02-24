@@ -14,6 +14,7 @@ class MainRepository(private val marvelWebService: MarvelWebService) : BaseRepos
     private val marvelDao by lazy {
         MarvelDatabase.getInstance(context)?.marvelDao()
     }
+
     suspend fun getComics(): MutableList<Comic>? {
         if (isNetworkAvailable()) {
             val response = safeApiCall(
@@ -25,7 +26,7 @@ class MainRepository(private val marvelWebService: MarvelWebService) : BaseRepos
             saveComics(responseTransformed)
             return responseTransformed
         }
-        return marvelDao?.getAll()?.toMutableList()
+        return marvelDao?.getAllItems()?.toMutableList()
     }
 
     suspend fun getCharacterByName(characterName: String): MutableList<CharacterResult>? {

@@ -2,8 +2,6 @@ package br.com.alex.marvelapiapp.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import br.com.alex.marvelapiapp.data.datasource.database.MarvelDatabase
-import br.com.alex.marvelapiapp.data.datasource.database.dao.MarvelDao
 import br.com.alex.marvelapiapp.data.datasource.entity.Comic
 import br.com.alex.marvelapiapp.data.datasource.remote.network.RetrofitBuilder
 import br.com.alex.marvelapiapp.data.datasource.remote.response.characters.CharacterResult
@@ -20,6 +18,7 @@ class MainViewModel : ViewModel() {
     val comicsLiveData = MutableLiveData<MutableList<Comic>>()
     val characterLiveData = MutableLiveData<MutableList<CharacterResult>>()
     val characterComicsLiveData = MutableLiveData<MutableList<ComicResults>>()
+
     fun getComics() {
         scope.launch {
             val comics = mainRepository.getComics()

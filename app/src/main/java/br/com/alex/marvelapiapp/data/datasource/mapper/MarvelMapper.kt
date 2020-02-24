@@ -2,20 +2,16 @@ package br.com.alex.marvelapiapp.data.datasource.mapper
 
 import br.com.alex.marvelapiapp.data.datasource.entity.Comic
 import br.com.alex.marvelapiapp.data.datasource.remote.response.comics.ComicsResponse
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MarvelMapper {
-
     fun transform(comicsResponse: ComicsResponse?): ArrayList<Comic> {
-        val list = ArrayList<Comic>()
+        val comicsList = ArrayList<Comic>()
 
         comicsResponse?.data?.results?.let {
-            for ((i, result) in it.withIndex()) {
-                list.add(
+            for ((index, result) in it.withIndex()) {
+                comicsList.add(
                     Comic(
-                        creation_date = i.toString(),
+                        creation_date = index.toString(),
                         title = result.title,
                         description = result.description,
                         imageUrl = result.thumbnail.path,
@@ -24,8 +20,6 @@ class MarvelMapper {
                 )
             }
         }
-
-        return list
+        return comicsList
     }
-
 }

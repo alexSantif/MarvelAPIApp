@@ -10,9 +10,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alex.marvelapiapp.R
+import br.com.alex.marvelapiapp.data.datasource.entity.Comic
+import br.com.alex.marvelapiapp.data.datasource.remote.response.characters.CharacterResult
+import br.com.alex.marvelapiapp.data.datasource.remote.response.comics.ComicResults
 import br.com.alex.marvelapiapp.utils.hideSoftKeyboard
 import br.com.alex.marvelapiapp.utils.isNetworkAvailable
-import br.com.alex.marvelapiapp.utils.showSnackBar
 import br.com.alex.marvelapiapp.utils.showToast
 import br.com.alex.marvelapiapp.view.ui.adapter.CharacterComicsAdapter
 import br.com.alex.marvelapiapp.view.ui.adapter.MainAdapter
@@ -35,22 +37,16 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = ViewModelFactory()
         viewModel = ViewModelProviders.of(this@MainActivity, viewModelFactory)
             .get(MainViewModel::class.java)
-//        if (isNetworkAvailable()) {
-            viewModel.getComics()
-            viewModel.comicsLiveData.observe(this, Observer {
-                pb_loading_data.visibility = GONE
+        viewModel.getComics()
+        viewModel.comicsLiveData.observe(this, Observer {
+            pb_loading_data.visibility = GONE
 
-                if (it == null) {
-                    showToast(this, "Erro ao baixar a lista de HQs")
-                } else {
-                    rv_comics_list.adapter = MainAdapter(it, this)
-                    val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-                    rv_comics_list.layoutManager = layoutManager
-                }
-            })
-//        } else {
-//            showSnackBar(this, cl_main_activity, "Sem conexão com a Internet")
-//        }
+            if (it.isEmpty()) {
+                showToast(this, "Nenhuma HQ encontrada")
+            } else {
+                buildComicsList(it)
+            }
+        })
 
         et_search_view.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -61,33 +57,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun buildComicsList(it: MutableList<Comic>) {
+        rv_comics_list.adapter = MainAdapter(it, this)
+        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        rv_comics_list.layoutManager = layoutManager
+    }
+
     private fun getCharacter() {
         if (isNetworkAvailable()) {
             pb_loading_data.visibility = VISIBLE
             rv_comics_list.visibility = GONE
             viewModel.getCharacterByName(et_search_view.text.toString())
             viewModel.characterLiveData.observe(this, Observer {
-                changeVisibilityViews()
+                changeViewsVisibility()
 
                 if (it == null) {
                     showToast(this, "Erro ao buscar a personagem")
                 } else {
-                    tv_hero_title.text = it[0].name
-                    tv_hero_description.text = it[0].description
-                    tv_hero_comics.text = "Veja as HQs de ${et_search_view.text}"
-                    Glide.with(this)
-                        .load("${it[0].characterThumbnail?.path}/portrait_xlarge.${it[0].characterThumbnail?.extension}")
-                        .into(iv_hero_image)
-
+                    buildCharacterData(it)
                     viewModel.getCharacterComics(it[0].id)
                     viewModel.characterComicsLiveData.observe(this, Observer { characterComics ->
                         if (characterComics == null) {
                             showToast(this, "Erro ao buscar as HQs da personagem")
                         } else {
-                            rv_hero_comics.adapter = CharacterComicsAdapter(characterComics, this)
-                            val layoutManager =
-                                LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-                            rv_hero_comics.layoutManager = layoutManager
+                            buildCharacterComicsList(characterComics)
                         }
                     })
                 }
@@ -97,7 +90,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeVisibilityViews() {
+    private fun buildCharacterComicsList(characterComics: MutableList<ComicResults>) {
+        rv_hero_comics.adapter = CharacterComicsAdapter(characterComics, this)
+        val layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        rv_hero_comics.layoutManager = layoutManager
+    }
+
+    private fun buildCharacterData(it: MutableList<CharacterResult>) {
+        tv_hero_title.text = it[0].name
+        tv_hero_description.text = it[0].description
+        tv_hero_comics.text = "Veja as HQs de ${et_search_view.text}"
+        Glide.with(this)
+            .load("${it[0].characterThumbnail?.path}/portrait_xlarge.${it[0].characterThumbnail?.extension}")
+            .into(iv_hero_image)
+    }
+
+    private fun changeViewsVisibility() {
         iv_hero_image.visibility = VISIBLE
         pb_loading_data.visibility = GONE
         tv_hero_title.visibility = VISIBLE

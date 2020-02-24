@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alex.marvelapiapp.R
 import br.com.alex.marvelapiapp.data.datasource.entity.Comic
-import br.com.alex.marvelapiapp.data.datasource.remote.response.comics.ComicResults
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.comics_list_row.view.*
 
