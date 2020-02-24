@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = ViewModelFactory()
         viewModel = ViewModelProviders.of(this@MainActivity, viewModelFactory)
             .get(MainViewModel::class.java)
-        if (isNetworkAvailable(this)) {
+//        if (isNetworkAvailable()) {
             viewModel.getComics()
             viewModel.comicsLiveData.observe(this, Observer {
                 pb_loading_data.visibility = GONE
@@ -48,9 +48,9 @@ class MainActivity : AppCompatActivity() {
                     rv_comics_list.layoutManager = layoutManager
                 }
             })
-        } else {
-            showSnackBar(this, cl_main_activity, "Sem conexão com a Internet")
-        }
+//        } else {
+//            showSnackBar(this, cl_main_activity, "Sem conexão com a Internet")
+//        }
 
         et_search_view.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -62,17 +62,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCharacter() {
-        if (isNetworkAvailable(this)) {
+        if (isNetworkAvailable()) {
             pb_loading_data.visibility = VISIBLE
             rv_comics_list.visibility = GONE
             viewModel.getCharacterByName(et_search_view.text.toString())
             viewModel.characterLiveData.observe(this, Observer {
-                iv_hero_image.visibility = VISIBLE
-                pb_loading_data.visibility = GONE
-                tv_hero_title.visibility = VISIBLE
-                tv_hero_description.visibility = VISIBLE
-                tv_hero_comics.visibility = VISIBLE
-                rv_hero_comics.visibility = VISIBLE
+                changeVisibilityViews()
 
                 if (it == null) {
                     showToast(this, "Erro ao buscar a personagem")
@@ -100,5 +95,14 @@ class MainActivity : AppCompatActivity() {
         } else {
             showToast(this, "Sem conexão com a Internet")
         }
+    }
+
+    private fun changeVisibilityViews() {
+        iv_hero_image.visibility = VISIBLE
+        pb_loading_data.visibility = GONE
+        tv_hero_title.visibility = VISIBLE
+        tv_hero_description.visibility = VISIBLE
+        tv_hero_comics.visibility = VISIBLE
+        rv_hero_comics.visibility = VISIBLE
     }
 }

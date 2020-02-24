@@ -4,8 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import br.com.alex.marvelapiapp.MarvelApplication
 
-fun isNetworkAvailable(context: Context): Boolean {
+fun isNetworkAvailable(): Boolean {
+    val context = MarvelApplication.appContext
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

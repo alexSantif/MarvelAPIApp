@@ -8,12 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alex.marvelapiapp.R
+import br.com.alex.marvelapiapp.data.datasource.entity.Comic
 import br.com.alex.marvelapiapp.data.datasource.remote.response.comics.ComicResults
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.comics_list_row.view.*
 
 class MainAdapter(
-    private val comics: List<ComicResults>,
+    private val comics: List<Comic>,
     private val activity: Activity
 ) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
@@ -31,7 +32,7 @@ class MainAdapter(
         val comic = comics[position]
         holder.tvComicTitle.text = comic.title
         Glide.with(activity)
-            .load("${comic.thumbnail.path}/portrait_xlarge.${comic.thumbnail.extension}")
+            .load("${comic.imageUrl}/portrait_xlarge.${comic.imageExtension}")
             .into(holder.ivComicImage)
     }
 

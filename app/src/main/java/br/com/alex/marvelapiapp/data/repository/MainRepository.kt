@@ -1,15 +1,31 @@
 package br.com.alex.marvelapiapp.data.repository
 
+import br.com.alex.marvelapiapp.MarvelApplication
+import br.com.alex.marvelapiapp.data.datasource.database.MarvelDatabase
+import br.com.alex.marvelapiapp.data.datasource.entity.Comic
+import br.com.alex.marvelapiapp.data.datasource.mapper.MarvelMapper
 import br.com.alex.marvelapiapp.data.datasource.remote.network.MarvelWebService
 import br.com.alex.marvelapiapp.data.datasource.remote.response.characters.CharacterResult
 import br.com.alex.marvelapiapp.data.datasource.remote.response.comics.ComicResults
+import br.com.alex.marvelapiapp.utils.isNetworkAvailable
 
 class MainRepository(private val marvelWebService: MarvelWebService) : BaseRepository() {
-    suspend fun getComics(): MutableList<ComicResults>? {
-        return safeApiCall(
-            call = { marvelWebService.requestComicsFromApi("comic", "thisMonth", "focDate") },
-            error = "Erro ao buscar dados das HQs"
-        )?.data?.results?.toMutableList()
+    private val context = MarvelApplication.appContext
+    private val marvelDao by lazy {
+        MarvelDatabase.getInstance(context)?.marvelDao()
+    }
+    suspend fun getComics(): MutableList<Comic>? {
+        if (isNetworkAvailable()) {
+            val response = safeApiCall(
+                call = { marvelWebService.requestComicsFromApi("comic", "thisMonth", "focDate") },
+                error = "Erro ao buscar dados das HQs"
+            )
+
+            val responseTransformed = MarvelMapper().transform(response)
+            saveComics(responseTransformed)
+            return responseTransformed
+        }
+        return marvelDao?.getAll()?.toMutableList()
     }
 
     suspend fun getCharacterByName(characterName: String): MutableList<CharacterResult>? {
@@ -24,5 +40,9 @@ class MainRepository(private val marvelWebService: MarvelWebService) : BaseRepos
             call = { marvelWebService.getCharacterComics(characterId.toString()) },
             error = "Erro ao buscar HQs da personagem"
         )?.data?.results?.toMutableList()
+    }
+
+    private suspend fun saveComics(comicsList: List<Comic>) {
+        marvelDao?.insertOrUpdateList(comicsList)
     }
 }
