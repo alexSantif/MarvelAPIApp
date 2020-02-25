@@ -69,11 +69,10 @@ class MainActivity : AppCompatActivity() {
             rv_comics_list.visibility = GONE
             viewModel.getCharacterByName(et_search_view.text.toString())
             viewModel.characterLiveData.observe(this, Observer {
-                changeViewsVisibility()
-
-                if (it == null) {
-                    showToast(this, "Erro ao buscar a personagem")
+                if (it.isEmpty()) {
+                    showToast(this, "Personagem não encontrado")
                 } else {
+                    changeViewsVisibility()
                     buildCharacterData(it)
                     viewModel.getCharacterComics(it[0].id)
                     viewModel.characterComicsLiveData.observe(this, Observer { characterComics ->

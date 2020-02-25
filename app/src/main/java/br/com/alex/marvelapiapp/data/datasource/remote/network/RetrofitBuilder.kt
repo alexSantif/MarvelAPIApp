@@ -14,7 +14,7 @@ object RetrofitBuilder {
     private val interceptor = Interceptor { chain ->
         val timestamp = Timestamp(System.currentTimeMillis()).toString()
         val url = chain.request().url.newBuilder()
-            .addQueryParameter(Constants.APIKEY_KEY, Constants.APIKEY)
+            .addQueryParameter(Constants.APIKEY, Constants.KEY)
             .addQueryParameter(Constants.TIMESTAMP_KEY, timestamp)
             .addQueryParameter(
                 Constants.HASH_KEY,
