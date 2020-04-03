@@ -13,15 +13,15 @@ interface MarvelWebService {
         @Query("format") format: String,
         @Query("dateDescriptor") dateDescriptor: String,
         @Query("orderBy") orderBy: String
-    ): Response<ComicsResponse>
+    ): ComicsResponse
 
     @GET("v1/public/characters")
     suspend fun getCharacterByName(
         @Query("name") name: String
-    ): Response<CharacterResponse>
+    ): CharacterResponse
 
     @GET("v1/public/characters/{characterId}/comics")
     suspend fun getCharacterComics(
         @Path("characterId") characterId: String
-    ): Response<ComicsResponse>
+    ): ComicsResponse
 }
