@@ -1,2 +1,5 @@
+include ':sharedutils'
+include ':data'
+include ':viewmodel'
 include ':app'
 rootProject.name='MarvelAPIApp'

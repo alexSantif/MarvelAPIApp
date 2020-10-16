@@ -1,8 +1,8 @@
 package br.com.alex.marvelapiapp.data.repository
 
-import br.com.alex.marvelapiapp.data.datasource.remote.response.comics.ComicsResponse
+import br.com.data.datasource.remote.response.comics.ComicsResponse
+import br.com.data.repository.BaseRepository
 import io.mockk.mockk
-import org.junit.Assert.*
 import org.junit.Test
 import retrofit2.Response
 
