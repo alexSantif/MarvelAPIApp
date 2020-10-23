@@ -1,21 +1,22 @@
 package br.com.data.repository
 
+import br.com.alex.marvelapiapp.MarvelApplication
 import br.com.data.datasource.database.MarvelDatabase
 import br.com.data.datasource.entity.Comic
 import br.com.data.datasource.mapper.MarvelMapper
 import br.com.data.datasource.remote.network.MarvelWebService
 import br.com.data.datasource.remote.response.characters.CharacterResult
 import br.com.data.datasource.remote.response.comics.ComicResults
-//import br.com.sharedutils.isNetworkAvailable
 
-class MainRepository(private val marvelWebService: MarvelWebService) : BaseRepository() {
+class MainRepository(private val marvelWebService: MarvelWebService) :
+    BaseRepository() {
     private val context = MarvelApplication.appContext
     private val marvelDao by lazy {
         MarvelDatabase.getInstance(context)?.marvelDao()
     }
 
     suspend fun getComics(): MutableList<Comic>? {
-       // if (isNetworkAvailable()) {
+        if (br.com.sharedutils.isNetworkAvailable()) {
             val response = safeApiCall(
                 call = { marvelWebService.requestComicsFromApi("comic", "thisMonth", "focDate") },
                 error = "Erro ao buscar dados das HQs"
@@ -24,8 +25,8 @@ class MainRepository(private val marvelWebService: MarvelWebService) : BaseRepos
             val responseTransformed = MarvelMapper().transform(response)
             saveComics(responseTransformed)
             return responseTransformed
-       // }
-       // return marvelDao?.getAllItems()?.toMutableList()
+        }
+        return marvelDao?.getAllItems()?.toMutableList()
     }
 
     suspend fun getCharacterByName(characterName: String): MutableList<CharacterResult>? {

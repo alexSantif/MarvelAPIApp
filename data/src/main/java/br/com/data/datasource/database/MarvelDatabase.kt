@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import br.com.data.datasource.database.dao.MarvelDao
 import br.com.data.datasource.entity.Comic
-import br.com.sharedutils.Constants
 
 @Database(
     entities = [Comic::class],
@@ -26,7 +25,7 @@ abstract class MarvelDatabase : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context,
                         MarvelDatabase::class.java,
-                        Constants.MARVEL_DATABASE
+                        br.com.sharedutils.Constants.MARVEL_DATABASE
                     ).build()
                 }
             }

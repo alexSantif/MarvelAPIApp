@@ -14,7 +14,10 @@ object RetrofitBuilder {
     private val interceptor = Interceptor { chain ->
         val timestamp = Timestamp(System.currentTimeMillis()).toString()
         val url = chain.request().url.newBuilder()
-            .addQueryParameter(Constants.APIKEY, Constants.KEY)
+            .addQueryParameter(
+                Constants.APIKEY,
+                Constants.KEY
+            )
             .addQueryParameter(Constants.TIMESTAMP_KEY, timestamp)
             .addQueryParameter(
                 Constants.HASH_KEY,
@@ -46,5 +49,8 @@ object RetrofitBuilder {
             .build()
     }
 
-    val marvelWebService: MarvelWebService = getRetrofit().create(MarvelWebService::class.java)
+    val marvelWebService: MarvelWebService =
+        getRetrofit().create(
+            MarvelWebService::class.java
+        )
 }

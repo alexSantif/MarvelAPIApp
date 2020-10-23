@@ -1,5 +1,7 @@
+include ':present'
 include ':sharedutils'
 include ':data'
-include ':viewmodel'
+include ':domain'
+include ':presentation'
 include ':app'
 rootProject.name='MarvelAPIApp'
