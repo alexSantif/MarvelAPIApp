@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MarvelAPIApp</string>
+    <string name="main_title">Marvel App</string>
+    <string name="hq_title">Título da HQ</string>
+    <string name="hq_image">Ilustração da HQ</string>
+    <string name="character_search">Busque um personagem…</string>
 </resources>

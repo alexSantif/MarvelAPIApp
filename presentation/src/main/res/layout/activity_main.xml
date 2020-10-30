@@ -8,6 +8,18 @@
     android:background="@color/colorPrimary"
     tools:context="br.com.presentation.ui.MainActivity">
 
+    <TextView
+        android:id="@+id/tv_app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/main_title"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/et_search_view"
         android:layout_width="0dp"
@@ -16,7 +28,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_edittext"
-        android:hint="Busque um personagem..."
+        android:hint="@string/character_search"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:maxLines="1"
@@ -26,18 +38,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_app_title" />
 
-    <TextView
-        android:id="@+id/tv_app_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="Marvel API App"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_comics_list"
         android:layout_width="0dp"
@@ -45,7 +45,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +68,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="TextView"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:visibility="invisible"
@@ -85,7 +83,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:minLines="8"
-        android:text="TextView"
         android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +98,6 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:text="TextView"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:visibility="invisible"
@@ -115,9 +111,7 @@
         android:id="@+id/rv_hero_comics"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
